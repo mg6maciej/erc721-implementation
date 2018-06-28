@@ -10,7 +10,7 @@ contract ERC721 {
 
     function tokenOfOwnerByIndex(address owner, uint index) public view returns (uint) {
         require(index < balances[owner]);
-        return 0;
+        return index;
     }
 
     function _mint(address owner) internal {
