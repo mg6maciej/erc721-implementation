@@ -30,16 +30,16 @@ contract ERC721 {
             index--;
         }
         require(tokens != 0);
-        uint id = 255;
-        if (tokens & 0x00000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0) { tokens >>= 128; } else { id -= 128; }
-        if (tokens & 0x000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFF == 0) { tokens >>= 64; } else { id -= 64; }
-        if (tokens & 0x00000000000000000000000000000000000000000000000000000000FFFFFFFF == 0) { tokens >>= 32; } else { id -= 32; }
-        if (tokens & 0x000000000000000000000000000000000000000000000000000000000000FFFF == 0) { tokens >>= 16; } else { id -= 16; }
-        if (tokens & 0x00000000000000000000000000000000000000000000000000000000000000FF == 0) { tokens >>= 8; } else { id -= 8; }
-        if (tokens & 0x000000000000000000000000000000000000000000000000000000000000000F == 0) { tokens >>= 4; } else { id -= 4; }
-        if (tokens & 0x0000000000000000000000000000000000000000000000000000000000000003 == 0) { tokens >>= 2; } else { id -= 2; }
-        if (tokens & 0x0000000000000000000000000000000000000000000000000000000000000001 != 0) { id -= 1; }
-        return id;
+        uint tokenId = 255;
+        if (tokens & 0x00000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0) { tokens >>= 128; } else { tokenId -= 128; }
+        if (tokens & 0x000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFF == 0) { tokens >>= 64; } else { tokenId -= 64; }
+        if (tokens & 0x00000000000000000000000000000000000000000000000000000000FFFFFFFF == 0) { tokens >>= 32; } else { tokenId -= 32; }
+        if (tokens & 0x000000000000000000000000000000000000000000000000000000000000FFFF == 0) { tokens >>= 16; } else { tokenId -= 16; }
+        if (tokens & 0x00000000000000000000000000000000000000000000000000000000000000FF == 0) { tokens >>= 8; } else { tokenId -= 8; }
+        if (tokens & 0x000000000000000000000000000000000000000000000000000000000000000F == 0) { tokens >>= 4; } else { tokenId -= 4; }
+        if (tokens & 0x0000000000000000000000000000000000000000000000000000000000000003 == 0) { tokens >>= 2; } else { tokenId -= 2; }
+        if (tokens & 0x0000000000000000000000000000000000000000000000000000000000000001 != 0) { tokenId -= 1; }
+        return tokenId;
     }
 
     function tokenByIndex(uint index) external view returns (uint) {
