@@ -95,6 +95,10 @@ contract("ERC721", ([owner, alice, bob]) => {
         const owner = await this.erc721.ownerOf(0);
         assert.strictEqual(owner, alice);
     });
+
+    it("Throws when token does not exist", async () => {
+        await expectThrows(this.erc721.ownerOf(0));
+    });
 });
 
 async function expectThrows(promise) {

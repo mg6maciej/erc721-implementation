@@ -18,7 +18,9 @@ contract ERC721 {
     }
 
     function ownerOf(uint tokenId) external view returns (address) {
-        return tokenToOwner[tokenId];
+        address owner = tokenToOwner[tokenId];
+        require(owner != 0);
+        return owner;
     }
 
     function tokenOfOwnerByIndex(address owner, uint index) public view returns (uint) {
