@@ -125,6 +125,11 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.transferFrom(bob, charlie, 0, { from: alice }));
     });
+
+    it("Throws when unapproved tries to transfer", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.transferFrom(alice, bob, 0, { from: charlie }));
+    });
 });
 
 async function expectThrows(promise) {

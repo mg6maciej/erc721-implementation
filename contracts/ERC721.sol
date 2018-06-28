@@ -48,7 +48,9 @@ contract ERC721 {
     }
 
     function transferFrom(address from, address to, uint tokenId) external {
-        require(from == tokenToOwner[tokenId]);
+        address owner = tokenToOwner[tokenId];
+        require(from == owner);
+        require(msg.sender == owner);
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
