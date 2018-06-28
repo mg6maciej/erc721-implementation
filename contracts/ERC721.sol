@@ -34,6 +34,10 @@ contract ERC721 {
         return id;
     }
 
+    function totalSupply() public pure returns (uint) {
+        return 0;
+    }
+
     function _mint(address owner) internal {
         ownerToTokens[owner] |= 1 << supply;
         supply++;

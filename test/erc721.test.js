@@ -61,6 +61,11 @@ contract("ERC721", ([owner, alice, bob]) => {
         const tokenId = await this.erc721.tokenOfOwnerByIndex(alice, 2);
         assert.strictEqual(tokenId.toNumber(), 2);
     });
+
+    it("Total supply is zero initially", async () => {
+        const supply = await this.erc721.totalSupply();
+        assert.strictEqual(supply.toNumber(), 0);
+    });
 });
 
 async function expectThrows(promise) {
