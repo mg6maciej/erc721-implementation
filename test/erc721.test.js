@@ -1,6 +1,6 @@
 const ERC721 = artifacts.require("TestERC721.sol");
 
-contract("ERC721", ([owner, alice, bob]) => {
+contract("ERC721", ([owner, alice, bob, charlie]) => {
 
     beforeEach(async () => {
         this.erc721 = await ERC721.new();
@@ -119,6 +119,11 @@ contract("ERC721", ([owner, alice, bob]) => {
         await this.erc721.transferFrom(alice, bob, 0, { from: alice });
         const owner = await this.erc721.ownerOf(0);
         assert.strictEqual(owner, bob);
+    });
+
+    it("Throws when from is not owner", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.transferFrom(bob, charlie, 0, { from: alice }));
     });
 });
 
