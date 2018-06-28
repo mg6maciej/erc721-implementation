@@ -4,7 +4,7 @@ import "../ERC721.sol";
 
 contract TestERC721 is ERC721 {
 
-    function mint(address owner) external {
-        _mint(owner);
+    function mint(address to) external {
+        _mint(to);
     }
 }

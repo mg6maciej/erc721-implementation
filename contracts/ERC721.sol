@@ -47,9 +47,9 @@ contract ERC721 {
         return index;
     }
 
-    function _mint(address owner) internal {
-        ownerToTokens[owner] |= 1 << totalSupply;
-        tokenToOwner[totalSupply] = owner;
+    function _mint(address to) internal {
+        ownerToTokens[to] |= 1 << totalSupply;
+        tokenToOwner[totalSupply] = to;
         totalSupply++;
     }
 }
