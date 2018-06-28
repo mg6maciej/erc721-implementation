@@ -35,7 +35,8 @@ contract ERC721 {
         return id;
     }
 
-    function tokenByIndex(uint index) public view returns (uint) {
+    function tokenByIndex(uint index) external view returns (uint) {
+        require(index < totalSupply);
         return 0;
     }
 
