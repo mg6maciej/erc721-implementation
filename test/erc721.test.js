@@ -1,6 +1,6 @@
 const ERC721 = artifacts.require("TestERC721.sol");
 
-contract('ERC721', ([owner, alice, bob]) => {
+contract("ERC721", ([owner, alice, bob]) => {
 
     beforeEach(async () => {
         this.erc721 = await ERC721.new();
@@ -53,6 +53,14 @@ contract('ERC721', ([owner, alice, bob]) => {
         const tokenId = await this.erc721.tokenOfOwnerByIndex(bob, 0);
         assert.strictEqual(tokenId.toNumber(), 1);
     });
+
+    it("Alice has token number two", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        const tokenId = await this.erc721.tokenOfOwnerByIndex(alice, 2);
+        assert.strictEqual(tokenId.toNumber(), 2);
+    });
 });
 
 async function expectThrows(promise) {
@@ -60,6 +68,6 @@ async function expectThrows(promise) {
         await promise;
         assert.fail();
     } catch (error) {
-        if (error.name === 'AssertionError') throw error;
+        if (error.name === "AssertionError") throw error;
     }
 }
