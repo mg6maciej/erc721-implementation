@@ -3,7 +3,8 @@ pragma solidity ^0.4.24;
 contract ERC721 {
 
     mapping (address => uint) private ownerToTokens;
-    uint private supply;
+
+    uint public totalSupply;
 
     function balanceOf(address owner) external view returns (uint) {
         uint count = 0;
@@ -34,12 +35,8 @@ contract ERC721 {
         return id;
     }
 
-    function totalSupply() public pure returns (uint) {
-        return 0;
-    }
-
     function _mint(address owner) internal {
-        ownerToTokens[owner] |= 1 << supply;
-        supply++;
+        ownerToTokens[owner] |= 1 << totalSupply;
+        totalSupply++;
     }
 }

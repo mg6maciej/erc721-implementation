@@ -66,6 +66,12 @@ contract("ERC721", ([owner, alice, bob]) => {
         const supply = await this.erc721.totalSupply();
         assert.strictEqual(supply.toNumber(), 0);
     });
+
+    it("Total supply is increased", async () => {
+        await this.erc721.mint(alice);
+        const supply = await this.erc721.totalSupply();
+        assert.strictEqual(supply.toNumber(), 1);
+    });
 });
 
 async function expectThrows(promise) {
