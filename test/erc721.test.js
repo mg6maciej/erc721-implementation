@@ -106,6 +106,13 @@ contract("ERC721", ([owner, alice, bob]) => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
     });
+
+    it("Bob has nonzero balance after transfer to him", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.transferFrom(alice, bob, 0, { from: alice });
+        const balance = await this.erc721.balanceOf(bob);
+        assert.strictEqual(balance.toNumber(), 1);
+    });
 });
 
 async function expectThrows(promise) {
