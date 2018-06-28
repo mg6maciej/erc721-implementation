@@ -126,9 +126,17 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await expectThrows(this.erc721.transferFrom(bob, charlie, 0, { from: alice }));
     });
 
-    it("Throws when unapproved tries to transfer", async () => {
+    it("Throws when unapproved actor tries to transfer", async () => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.transferFrom(alice, bob, 0, { from: charlie }));
+    });
+
+    it("Charlie can transfer to Bob when approved by Alice", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 0, { from: alice });
+        await this.erc721.transferFrom(alice, bob, 0, { from: charlie });
+        const owner = await this.erc721.ownerOf(0);
+        assert.strictEqual(owner, bob);
     });
 });
 
