@@ -89,6 +89,12 @@ contract("ERC721", ([owner, alice, bob]) => {
         const tokenId = await this.erc721.tokenByIndex(1);
         assert.strictEqual(tokenId.toNumber(), 1);
     });
+
+    it("Alice is owner of token zero", async () => {
+        await this.erc721.mint(alice);
+        const owner = await this.erc721.ownerOf(0);
+        assert.strictEqual(owner, alice);
+    });
 });
 
 async function expectThrows(promise) {
