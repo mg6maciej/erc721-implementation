@@ -1,6 +1,6 @@
 const ERC721 = artifacts.require("TestERC721.sol");
 
-contract('ERC721', ([alice]) => {
+contract('ERC721', ([owner, alice]) => {
 
     beforeEach(async () => {
         this.erc721 = await ERC721.new();
@@ -12,8 +12,15 @@ contract('ERC721', ([alice]) => {
     });
 
     it("Alice has nonzero balance after mint", async () => {
-        await this.erc721.mint();
+        await this.erc721.mint(alice);
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 1);
+    });
+
+    it("Alice's balance is increased after second mint", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        const balance = await this.erc721.balanceOf(alice);
+        assert.strictEqual(balance.toNumber(), 2);
     });
 });

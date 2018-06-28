@@ -8,7 +8,7 @@ contract ERC721 {
         return balance;
     }
 
-    function _mint(address owner, uint count) internal {
-        balance = 1;
+    function _mint(address owner) internal {
+        balance += 1;
     }
 }
