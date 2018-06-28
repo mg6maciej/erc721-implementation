@@ -2,7 +2,13 @@ pragma solidity ^0.4.24;
 
 contract ERC721 {
 
-    function balanceOf(address owner) public pure returns (uint) {
-        return 0;
+    uint private balance;
+
+    function balanceOf(address owner) public view returns (uint) {
+        return balance;
+    }
+
+    function _mint(address owner, uint count) internal {
+        balance = 1;
     }
 }
