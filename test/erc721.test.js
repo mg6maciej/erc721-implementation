@@ -138,6 +138,12 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const owner = await this.erc721.ownerOf(0);
         assert.strictEqual(owner, bob);
     });
+
+    it("Bob cannot transfer when Charlie is approved by Alice", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 0, { from: alice });
+        await expectThrows(this.erc721.transferFrom(alice, charlie, 0, { from: bob }));
+    });
 });
 
 async function expectThrows(promise) {
