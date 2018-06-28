@@ -50,6 +50,7 @@ contract ERC721 {
     function transferFrom(address from, address to, uint tokenId) external {
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
+        tokenToOwner[tokenId] = to;
     }
 
     function _mint(address to) internal {

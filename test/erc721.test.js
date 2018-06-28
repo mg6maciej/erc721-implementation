@@ -113,6 +113,13 @@ contract("ERC721", ([owner, alice, bob]) => {
         const balance = await this.erc721.balanceOf(bob);
         assert.strictEqual(balance.toNumber(), 1);
     });
+
+    it("Bob is owner of token after transfer to him", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.transferFrom(alice, bob, 0, { from: alice });
+        const owner = await this.erc721.ownerOf(0);
+        assert.strictEqual(owner, bob);
+    });
 });
 
 async function expectThrows(promise) {
