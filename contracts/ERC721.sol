@@ -37,7 +37,7 @@ contract ERC721 {
 
     function tokenByIndex(uint index) external view returns (uint) {
         require(index < totalSupply);
-        return 0;
+        return index;
     }
 
     function _mint(address owner) internal {

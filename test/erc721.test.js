@@ -82,6 +82,13 @@ contract("ERC721", ([owner, alice, bob]) => {
     it("Throws when asking for nonexistent token", async () => {
         await expectThrows(this.erc721.tokenByIndex(0));
     });
+
+    it("The second token is one", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        const tokenId = await this.erc721.tokenByIndex(1);
+        assert.strictEqual(tokenId.toNumber(), 1);
+    });
 });
 
 async function expectThrows(promise) {
