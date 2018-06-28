@@ -35,4 +35,17 @@ contract('ERC721', ([owner, alice, bob]) => {
         const tokenId = await this.erc721.tokenOfOwnerByIndex(alice, 0);
         assert.strictEqual(tokenId.toNumber(), 0);
     });
+
+    it("Throws when Alice has no tokens", async () => {
+        await expectThrows(this.erc721.tokenOfOwnerByIndex(alice, 0));
+    });
 });
+
+async function expectThrows(promise) {
+    try {
+        await promise;
+        assert.fail();
+    } catch (error) {
+        if (error.name === 'AssertionError') throw error;
+    }
+}
