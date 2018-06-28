@@ -2,13 +2,13 @@ pragma solidity ^0.4.24;
 
 contract ERC721 {
 
-    uint private balance;
+    mapping (address => uint) private balances;
 
     function balanceOf(address owner) public view returns (uint) {
-        return balance;
+        return balances[owner];
     }
 
     function _mint(address owner) internal {
-        balance += 1;
+        balances[owner] += 1;
     }
 }
