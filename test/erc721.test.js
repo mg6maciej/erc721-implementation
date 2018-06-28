@@ -99,6 +99,13 @@ contract("ERC721", ([owner, alice, bob]) => {
     it("Throws when token does not exist", async () => {
         await expectThrows(this.erc721.ownerOf(0));
     });
+
+    it("Alice has zero balance after transfer to Bob", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.transferFrom(alice, bob, 0, { from: alice });
+        const balance = await this.erc721.balanceOf(alice);
+        assert.strictEqual(balance.toNumber(), 0);
+    });
 });
 
 async function expectThrows(promise) {

@@ -47,6 +47,10 @@ contract ERC721 {
         return index;
     }
 
+    function transferFrom(address from, address to, uint tokenId) external {
+        ownerToTokens[from] &= ~(1 << tokenId);
+    }
+
     function _mint(address to) internal {
         ownerToTokens[to] |= 1 << totalSupply;
         tokenToOwner[totalSupply] = to;
