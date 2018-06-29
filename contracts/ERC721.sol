@@ -81,11 +81,11 @@ contract ERC721 {
         safeTransferFrom(from, to, tokenId, "");
     }
 
-    function approve(address spender, uint tokenId) external {
+    function approve(address approved, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
         require(msg.sender == owner);
-        require(spender != owner);
-        tokenToApproved[tokenId] = spender;
+        require(approved != owner);
+        tokenToApproved[tokenId] = approved;
     }
 
     function setApprovalForAll(address operator, bool value) external {
