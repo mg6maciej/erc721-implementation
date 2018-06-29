@@ -1,5 +1,5 @@
-const web3Abi = require('web3-eth-abi');
-const keccak = require('js-sha3').keccak_256;
+const web3Abi = require("web3-eth-abi");
+const keccak = require("js-sha3").keccak_256;
 
 const ERC721 = artifacts.require("TestERC721.sol");
 const TestERC721Receiver = artifacts.require("TestERC721Receiver.sol");
@@ -331,7 +331,7 @@ async function expectThrows(promise) {
 }
 
 function safeTransferFrom(functionParams, executionParams) {
-    const safeTransferFromFunc = ERC721.abi.find(f => f.name === 'safeTransferFrom' && f.inputs.length === functionParams.length);
+    const safeTransferFromFunc = ERC721.abi.find(f => f.name === "safeTransferFrom" && f.inputs.length === functionParams.length);
     executionParams.data = web3Abi.encodeFunctionCall(safeTransferFromFunc, functionParams);
     executionParams.gas = 500000;
     const txHash = web3.eth.sendTransaction(executionParams);
