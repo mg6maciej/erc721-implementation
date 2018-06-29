@@ -173,16 +173,20 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
     });
 
     it("Charlie is approved for all by Alice", async () => {
-        await this.erc721.mint(alice);
         await this.erc721.setApprovalForAll(charlie, true, { from: alice });
         const approved = await this.erc721.isApprovedForAll(alice, charlie);
         assert.strictEqual(approved, true);
     });
 
     it("Bob is not approved for all by Alice", async () => {
-        await this.erc721.mint(alice);
         await this.erc721.setApprovalForAll(charlie, true, { from: alice });
         const approved = await this.erc721.isApprovedForAll(alice, bob);
+        assert.strictEqual(approved, false);
+    });
+
+    it("Charlie is not approved for all by Bob", async () => {
+        await this.erc721.setApprovalForAll(charlie, true, { from: alice });
+        const approved = await this.erc721.isApprovedForAll(bob, charlie);
         assert.strictEqual(approved, false);
     });
 });
