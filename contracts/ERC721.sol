@@ -53,12 +53,12 @@ contract ERC721 {
         address owner = tokenToOwner[tokenId];
         address approved = tokenToApproved[tokenId];
         require(from == owner);
-        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender] || msg.sender == approved);
+        require(msg.sender == owner || msg.sender == approved || ownerToApprovedOperators[owner][msg.sender]);
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
         if (approved != 0) {
-            tokenToApproved[tokenId] = 0;
+            delete tokenToApproved[tokenId];
         }
     }
 
