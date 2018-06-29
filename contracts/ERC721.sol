@@ -72,7 +72,7 @@ contract ERC721 {
         uint size;
         assembly { size := extcodesize(to) }
         if (size > 0) {
-            ERC721Receiver(to).onERC721Received(msg.sender, from, 0, data);
+            ERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, data);
         }
     }
 

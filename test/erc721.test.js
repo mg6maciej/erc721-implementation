@@ -222,7 +222,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(balance.toNumber(), 0);
     });
 
-    it("Receiver contracts receives parameters from erc721", async () => {
+    it("Receiver contract receives parameters from erc721", async () => {
         const receiver = await TestERC721Receiver.new();
         await this.erc721.mint(alice);
         safeTransferFrom([alice, receiver.address, 0, "0xdeadbeef"], { from: alice, to: this.erc721.address });
@@ -236,13 +236,22 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(data, "0xdeadbeef");
     });
 
-    it("Receiver contracts receives real operator from erc721", async () => {
+    it("Receiver contract receives real operator from erc721", async () => {
         const receiver = await TestERC721Receiver.new();
         await this.erc721.mint(alice);
         await this.erc721.approve(bob, 0, { from: alice });
         safeTransferFrom([alice, receiver.address, 0], { from: bob, to: this.erc721.address });
         const operator = await receiver.operator();
         assert.strictEqual(operator, bob);
+    });
+
+    it("Receiver contract receives real token id from erc721", async () => {
+        const receiver = await TestERC721Receiver.new();
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        safeTransferFrom([alice, receiver.address, 1], { from: alice, to: this.erc721.address });
+        const tokenId = await receiver.tokenId();
+        assert.strictEqual(tokenId.toNumber(), 1);
     });
 });
 
