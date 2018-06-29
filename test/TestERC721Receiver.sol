@@ -12,6 +12,6 @@ contract TestERC721Receiver {
         from = _from;
         tokenId = _tokenId;
         data = _data;
-        return 0;
+        return 0x150b7a02;
     }
 }

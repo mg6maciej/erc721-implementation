@@ -2,6 +2,7 @@ const web3Abi = require('web3-eth-abi');
 
 const ERC721 = artifacts.require("TestERC721.sol");
 const TestERC721Receiver = artifacts.require("TestERC721Receiver.sol");
+const InvalidTestERC721Receiver = artifacts.require("InvalidTestERC721Receiver.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
 
@@ -252,6 +253,17 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         safeTransferFrom([alice, receiver.address, 1], { from: alice, to: this.erc721.address });
         const tokenId = await receiver.tokenId();
         assert.strictEqual(tokenId.toNumber(), 1);
+    });
+
+    it("Throws when receiver returns invalid magic value", async () => {
+        const receiver = await InvalidTestERC721Receiver.new();
+        await this.erc721.mint(alice);
+        try {
+            safeTransferFrom([alice, receiver.address, 0], { from: alice, to: this.erc721.address });
+            assert.fail();
+        } catch (error) {
+            if (error.name === "AssertionError") throw error;
+        }
     });
 });
 

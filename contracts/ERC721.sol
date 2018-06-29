@@ -72,7 +72,8 @@ contract ERC721 {
         uint size;
         assembly { size := extcodesize(to) }
         if (size > 0) {
-            ERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, data);
+            bytes4 magic = ERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, data);
+            require(magic == 0x150b7a02);
         }
     }
 
