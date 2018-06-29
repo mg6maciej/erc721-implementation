@@ -238,7 +238,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(data, "0xdeadbeef");
     });
 
-    it("Receiver contract receives real operator from erc721", async () => {
+    it("Receiver contract receives correct operator from erc721", async () => {
         const receiver = await TestERC721Receiver.new();
         await this.erc721.mint(alice);
         await this.erc721.approve(bob, 0, { from: alice });
@@ -247,7 +247,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(operator, bob);
     });
 
-    it("Receiver contract receives real token id from erc721", async () => {
+    it("Receiver contract receives correct token id from erc721", async () => {
         const receiver = await TestERC721Receiver.new();
         await this.erc721.mint(alice);
         await this.erc721.mint(alice);
@@ -292,19 +292,32 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         const { receipt: { logs } } = await this.erc721.approve(bob, 0, { from: alice });
         assert.strictEqual(logs.length, 1);
-        assert.strictEqual(logs[0].topics[0], "0x" + keccak("Approval(address,address,uint256)"));
-        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), alice);
-        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
-        assert.strictEqual(parseInt(logs[0].topics[3]), 0);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("Approval(address,address,uint256)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(l.topics[3]), 0);
     });
 
     it("ApprovalForAll event is emitted when Alice approves Bob for all", async () => {
         const { receipt: { logs } } = await this.erc721.setApprovalForAll(bob, true, { from: alice });
         assert.strictEqual(logs.length, 1);
-        assert.strictEqual(logs[0].topics[0], "0x" + keccak("ApprovalForAll(address,address,bool)"));
-        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), alice);
-        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
-        assert.strictEqual(logs[0].data != ("0x" + "0".repeat(64)), true);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("ApprovalForAll(address,address,bool)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(l.data != ("0x" + "0".repeat(64)), true);
+    });
+
+    it("Transfer event is emitted when Alice sends token to Bob", async () => {
+        await this.erc721.mint(alice);
+        const { receipt: { logs } } = await this.erc721.transferFrom(alice, bob, 0, { from: alice });
+        assert.strictEqual(logs.length, 1);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(l.topics[3]), 0);
     });
 });
 
