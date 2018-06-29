@@ -62,6 +62,10 @@ contract ERC721 {
         approved[tokenId] = spender;
     }
 
+    function getApproved(uint tokenId) external view returns (address) {
+        return approved[tokenId];
+    }
+
     function _mint(address to) internal {
         ownerToTokens[to] |= 1 << totalSupply;
         tokenToOwner[totalSupply] = to;

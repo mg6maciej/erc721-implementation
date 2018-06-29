@@ -156,6 +156,13 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.approve(charlie, 0, { from: bob }));
     });
+
+    it("Charlie is approved for token", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 0, { from: alice });
+        const approved = await this.erc721.getApproved(0);
+        assert.strictEqual(approved, charlie);
+    });
 });
 
 async function expectThrows(promise) {
