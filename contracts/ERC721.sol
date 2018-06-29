@@ -83,7 +83,7 @@ contract ERC721 {
 
     function approve(address approved, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
-        require(msg.sender == owner);
+        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender]);
         require(approved != owner);
         tokenToApproved[tokenId] = approved;
     }
