@@ -7,4 +7,10 @@ contract TestERC721 is ERC721 {
     function mint(address to) external {
         _mint(to);
     }
+
+    function mintMany(address to, uint amount) external {
+        for (uint i = 0; i < amount; i++) {
+            _mint(to);
+        }
+    }
 }
