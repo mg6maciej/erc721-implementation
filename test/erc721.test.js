@@ -265,6 +265,11 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
             if (error.name === "AssertionError") throw error;
         }
     });
+
+    it("Alice cannot approve herself", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.approve(alice, 0, { from: alice }));
+    });
 });
 
 async function expectThrows(promise) {
