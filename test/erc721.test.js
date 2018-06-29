@@ -1,4 +1,5 @@
 const web3Abi = require('web3-eth-abi');
+const keccak = require('js-sha3').keccak_256;
 
 const ERC721 = artifacts.require("TestERC721.sol");
 const TestERC721Receiver = artifacts.require("TestERC721Receiver.sol");
@@ -285,6 +286,16 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.approve(charlie, 0, { from: bob });
         const approved = await this.erc721.getApproved(0);
         assert.strictEqual(approved, charlie);
+    });
+
+    it("Approval event is emitted when Alice approves Bob of token zero", async () => {
+        await this.erc721.mint(alice);
+        const { receipt: { logs } } = await this.erc721.approve(bob, 0, { from: alice });
+        assert.strictEqual(logs.length, 1);
+        assert.strictEqual(logs[0].topics[0], "0x" + keccak("Approval(address,address,uint256)"));
+        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(logs[0].topics[3]), 0);
     });
 });
 
