@@ -1,6 +1,7 @@
 const web3Abi = require('web3-eth-abi');
 
 const ERC721 = artifacts.require("TestERC721.sol");
+const TestERC721Receiver = artifacts.require("TestERC721Receiver.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
 
@@ -220,6 +221,20 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
     });
+
+    it("Receiver contracts receives parameters from erc721", async () => {
+        const receiver = await TestERC721Receiver.new();
+        await this.erc721.mint(alice);
+        safeTransferFrom([alice, receiver.address, 0, "0xdeadbeef"], { from: alice, to: this.erc721.address });
+        const operator = await receiver.operator();
+        const from = await receiver.from();
+        const tokenId = await receiver.tokenId();
+        const data = await receiver.data();
+        assert.strictEqual(operator, alice);
+        assert.strictEqual(from, alice);
+        assert.strictEqual(tokenId.toNumber(), 0);
+        assert.strictEqual(data, "0xdeadbeef");
+    });
 });
 
 async function expectThrows(promise) {
@@ -234,6 +249,7 @@ async function expectThrows(promise) {
 function safeTransferFrom(functionParams, executionParams) {
     const safeTransferFromFunc = ERC721.abi.find(f => f.name === 'safeTransferFrom' && f.inputs.length === functionParams.length);
     executionParams.data = web3Abi.encodeFunctionCall(safeTransferFromFunc, functionParams);
+    executionParams.gas = 500000;
     const txHash = web3.eth.sendTransaction(executionParams);
     return web3.eth.getTransactionReceipt(txHash);
 }

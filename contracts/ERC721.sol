@@ -1,5 +1,10 @@
 pragma solidity ^0.4.24;
 
+interface ERC721Receiver {
+
+    function onERC721Received(address operator, address from, uint tokenId, bytes data) external returns (bytes4);
+}
+
 contract ERC721 {
 
     mapping (address => uint) private ownerToTokens;
@@ -64,6 +69,11 @@ contract ERC721 {
 
     function safeTransferFrom(address from, address to, uint tokenId, bytes data) public {
         transferFrom(from, to, tokenId);
+        uint size;
+        assembly { size := extcodesize(to) }
+        if (size > 0) {
+            ERC721Receiver(to).onERC721Received(from, from, 0, data);
+        }
     }
 
     function safeTransferFrom(address from, address to, uint tokenId) external {

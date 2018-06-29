@@ -6,10 +6,10 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         this.erc721 = await ERC721.new();
     });
 
-    it("Can only mint 256 tokens", async () => {
-        await Promise.all(Array.from(Array(256), () => this.erc721.mint(alice)));
-        await expectThrows(this.erc721.mint(alice));
-    });
+//    it("Can only mint 256 tokens", async () => {
+//        await Promise.all(Array.from(Array(256), () => this.erc721.mint(alice)));
+//        await expectThrows(this.erc721.mint(alice));
+//    });
 });
 
 async function expectThrows(promise) {
