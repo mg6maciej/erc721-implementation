@@ -5,7 +5,7 @@ contract ERC721 {
     mapping (address => uint) private ownerToTokens;
     mapping (uint => address) private tokenToOwner;
     mapping (uint => address) private tokenToApproved;
-    mapping (address => mapping (address => bool)) private ownerToApprovedOpearators;
+    mapping (address => mapping (address => bool)) private ownerToApprovedOperators;
 
     uint public totalSupply;
 
@@ -52,7 +52,7 @@ contract ERC721 {
     function transferFrom(address from, address to, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
         require(from == owner);
-        require(msg.sender == owner || ownerToApprovedOpearators[owner][msg.sender] || msg.sender == tokenToApproved[tokenId]);
+        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender] || msg.sender == tokenToApproved[tokenId]);
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
@@ -64,7 +64,7 @@ contract ERC721 {
     }
 
     function setApprovalForAll(address operator, bool value) external {
-        ownerToApprovedOpearators[msg.sender][operator] = value;
+        ownerToApprovedOperators[msg.sender][operator] = value;
     }
 
     function getApproved(uint tokenId) external view returns (address) {
@@ -72,7 +72,7 @@ contract ERC721 {
     }
 
     function isApprovedForAll(address owner, address operator) external view returns (bool) {
-        return ownerToApprovedOpearators[owner][operator];
+        return ownerToApprovedOperators[owner][operator];
     }
 
     function _mint(address to) internal {
