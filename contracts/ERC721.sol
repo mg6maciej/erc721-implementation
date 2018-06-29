@@ -71,6 +71,10 @@ contract ERC721 {
         return tokenToApproved[tokenId];
     }
 
+    function isApprovedForAll(address owner, address spender) external view returns (bool) {
+        return true;
+    }
+
     function _mint(address to) internal {
         ownerToTokens[to] |= 1 << totalSupply;
         tokenToOwner[totalSupply] = to;
