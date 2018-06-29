@@ -235,6 +235,15 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(tokenId.toNumber(), 0);
         assert.strictEqual(data, "0xdeadbeef");
     });
+
+    it("Receiver contracts receives real operator from erc721", async () => {
+        const receiver = await TestERC721Receiver.new();
+        await this.erc721.mint(alice);
+        await this.erc721.approve(bob, 0, { from: alice });
+        safeTransferFrom([alice, receiver.address, 0], { from: bob, to: this.erc721.address });
+        const operator = await receiver.operator();
+        assert.strictEqual(operator, bob);
+    });
 });
 
 async function expectThrows(promise) {
