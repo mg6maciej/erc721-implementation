@@ -1,3 +1,5 @@
+const web3Abi = require('web3-eth-abi');
+
 const ERC721 = artifacts.require("TestERC721.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
@@ -207,7 +209,14 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
 
     it("Alice has zero balance after safe transfer to Bob", async () => {
         await this.erc721.mint(alice);
-        await this.erc721.safeTransferFrom(alice, bob, 0, { from: alice });
+        safeTransferFrom([alice, bob, 0], { from: alice, to: this.erc721.address });
+        const balance = await this.erc721.balanceOf(alice);
+        assert.strictEqual(balance.toNumber(), 0);
+    });
+
+    it("Alice has zero balance after safe transfer with data to Bob", async () => {
+        await this.erc721.mint(alice);
+        safeTransferFrom([alice, bob, 0, "0xdeadbeef"], { from: alice, to: this.erc721.address });
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
     });
@@ -220,4 +229,11 @@ async function expectThrows(promise) {
     } catch (error) {
         if (error.name === "AssertionError") throw error;
     }
+}
+
+function safeTransferFrom(functionParams, executionParams) {
+    const safeTransferFromFunc = ERC721.abi.find(f => f.name === 'safeTransferFrom' && f.inputs.length === functionParams.length);
+    executionParams.data = web3Abi.encodeFunctionCall(safeTransferFromFunc, functionParams);
+    const txHash = web3.eth.sendTransaction(executionParams);
+    return web3.eth.getTransactionReceipt(txHash);
 }

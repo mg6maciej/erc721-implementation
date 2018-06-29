@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "web3-eth-abi": "1.0.0-beta.34"
+  }
+}

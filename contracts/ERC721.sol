@@ -62,8 +62,12 @@ contract ERC721 {
         }
     }
 
-    function safeTransferFrom(address from, address to, uint tokenId) external {
+    function safeTransferFrom(address from, address to, uint tokenId, bytes data) public {
         transferFrom(from, to, tokenId);
+    }
+
+    function safeTransferFrom(address from, address to, uint tokenId) external {
+        safeTransferFrom(from, to, tokenId, "");
     }
 
     function approve(address spender, uint tokenId) external {
