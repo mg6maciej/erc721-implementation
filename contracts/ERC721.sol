@@ -80,6 +80,7 @@ contract ERC721 {
     }
 
     function _mint(address to) internal {
+        require(totalSupply < 256);
         ownerToTokens[to] |= 1 << totalSupply;
         tokenToOwner[totalSupply] = to;
         totalSupply++;
