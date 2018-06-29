@@ -297,6 +297,15 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
         assert.strictEqual(parseInt(logs[0].topics[3]), 0);
     });
+
+    it("ApprovalForAll event is emitted when Alice approves Bob for all", async () => {
+        const { receipt: { logs } } = await this.erc721.setApprovalForAll(bob, true, { from: alice });
+        assert.strictEqual(logs.length, 1);
+        assert.strictEqual(logs[0].topics[0], "0x" + keccak("ApprovalForAll(address,address,bool)"));
+        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(logs[0].data != ("0x" + "0".repeat(64)), true);
+    });
 });
 
 async function expectThrows(promise) {

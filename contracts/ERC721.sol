@@ -8,6 +8,7 @@ interface ERC721Receiver {
 contract ERC721 {
 
     event Approval(address indexed owner, address indexed approved, uint indexed tokenId);
+    event ApprovalForAll(address indexed owner, address indexed operator, bool value);
 
     mapping (address => uint) private ownerToTokens;
     mapping (uint => address) private tokenToOwner;
@@ -94,6 +95,7 @@ contract ERC721 {
     function setApprovalForAll(address operator, bool value) external {
         require(msg.sender != operator);
         ownerToApprovedOperators[msg.sender][operator] = value;
+        emit ApprovalForAll(msg.sender, operator, value);
     }
 
     function getApproved(uint tokenId) external view returns (address) {
