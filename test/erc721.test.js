@@ -322,11 +322,15 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
 });
 
 async function expectThrows(promise) {
+    const resolvedWithoutError = false;
     try {
         await promise;
-        assert.fail();
+        resolvedWithoutError = true;
     } catch (error) {
-        if (error.name === "AssertionError") throw error;
+        // ignore
+    }
+    if (resolvedWithoutError) {
+        assert.fail();
     }
 }
 
