@@ -270,6 +270,14 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.approve(alice, 0, { from: alice }));
     });
+
+    it("Alice cannot approve for nonexistent token", async () => {
+        await expectThrows(this.erc721.approve(bob, 0, { from: alice }));
+    });
+
+    it("Alice cannot approve herself for all", async () => {
+        await expectThrows(this.erc721.setApprovalForAll(alice, true, { from: alice }));
+    });
 });
 
 async function expectThrows(promise) {

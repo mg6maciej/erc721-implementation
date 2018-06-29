@@ -89,6 +89,7 @@ contract ERC721 {
     }
 
     function setApprovalForAll(address operator, bool value) external {
+        require(msg.sender != operator);
         ownerToApprovedOperators[msg.sender][operator] = value;
     }
 
