@@ -121,7 +121,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(owner, bob);
     });
 
-    it("Throws when from is not owner", async () => {
+    it("Throws when from is not an owner", async () => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.transferFrom(bob, charlie, 0, { from: alice }));
     });
@@ -150,6 +150,11 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         await this.erc721.approve(charlie, 0, { from: alice });
         await expectThrows(this.erc721.transferFrom(alice, bob, 1, { from: charlie }));
+    });
+
+    it("Bob cannot approve Charlie of Alice's token", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.approve(charlie, 0, { from: bob }));
     });
 });
 

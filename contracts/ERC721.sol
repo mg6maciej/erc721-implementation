@@ -58,6 +58,7 @@ contract ERC721 {
     }
 
     function approve(address spender, uint tokenId) external {
+        require(msg.sender == tokenToOwner[tokenId]);
         approved[tokenId] = spender;
     }
 
