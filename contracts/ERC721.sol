@@ -64,7 +64,7 @@ contract ERC721 {
     }
 
     function setApprovalForAll(address operator, bool value) external {
-        approvedForAll[msg.sender][operator] = true;
+        approvedForAll[msg.sender][operator] = value;
     }
 
     function getApproved(uint tokenId) external view returns (address) {

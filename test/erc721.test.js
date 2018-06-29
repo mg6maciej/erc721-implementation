@@ -189,6 +189,13 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const approved = await this.erc721.isApprovedForAll(bob, charlie);
         assert.strictEqual(approved, false);
     });
+
+    it("Charlie is not longer approved for all by Alice", async () => {
+        await this.erc721.setApprovalForAll(charlie, true, { from: alice });
+        await this.erc721.setApprovalForAll(charlie, false, { from: alice });
+        const approved = await this.erc721.isApprovedForAll(alice, charlie);
+        assert.strictEqual(approved, false);
+    });
 });
 
 async function expectThrows(promise) {
