@@ -49,7 +49,7 @@ contract ERC721 {
         return index;
     }
 
-    function transferFrom(address from, address to, uint tokenId) external {
+    function transferFrom(address from, address to, uint tokenId) public {
         address owner = tokenToOwner[tokenId];
         address approved = tokenToApproved[tokenId];
         require(from == owner);
@@ -60,6 +60,10 @@ contract ERC721 {
         if (approved != 0) {
             delete tokenToApproved[tokenId];
         }
+    }
+
+    function safeTransferFrom(address from, address to, uint tokenId) external {
+        transferFrom(from, to, tokenId);
     }
 
     function approve(address spender, uint tokenId) external {

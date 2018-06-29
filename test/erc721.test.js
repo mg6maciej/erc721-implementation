@@ -204,6 +204,13 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const approved = await this.erc721.getApproved(0);
         assert.strictEqual(approved, "0x0000000000000000000000000000000000000000");
     });
+
+    it("Alice has zero balance after safe transfer to Bob", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.safeTransferFrom(alice, bob, 0, { from: alice });
+        const balance = await this.erc721.balanceOf(alice);
+        assert.strictEqual(balance.toNumber(), 0);
+    });
 });
 
 async function expectThrows(promise) {
