@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@0xcert/ethereum-erc721": "1.10.0",
     "web3-eth-abi": "1.0.0-beta.34"
   }
 }
