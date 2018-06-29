@@ -51,11 +51,15 @@ contract ERC721 {
 
     function transferFrom(address from, address to, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
+        address approved = tokenToApproved[tokenId];
         require(from == owner);
-        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender] || msg.sender == tokenToApproved[tokenId]);
+        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender] || msg.sender == approved);
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
+        if (approved != 0) {
+            tokenToApproved[tokenId] = 0;
+        }
     }
 
     function approve(address spender, uint tokenId) external {

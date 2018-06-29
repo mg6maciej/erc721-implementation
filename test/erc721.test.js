@@ -190,11 +190,19 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(approved, false);
     });
 
-    it("Charlie is not longer approved for all by Alice", async () => {
+    it("Charlie is no longer approved for all by Alice", async () => {
         await this.erc721.setApprovalForAll(charlie, true, { from: alice });
         await this.erc721.setApprovalForAll(charlie, false, { from: alice });
         const approved = await this.erc721.isApprovedForAll(alice, charlie);
         assert.strictEqual(approved, false);
+    });
+
+    it("Charlie is no longer approved after transfer", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 0, { from: alice });
+        await this.erc721.transferFrom(alice, bob, 0, { from: charlie });
+        const approved = await this.erc721.getApproved(0);
+        assert.strictEqual(approved, "0x0000000000000000000000000000000000000000");
     });
 });
 
