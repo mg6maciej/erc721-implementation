@@ -144,6 +144,13 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.approve(charlie, 0, { from: alice });
         await expectThrows(this.erc721.transferFrom(alice, charlie, 0, { from: bob }));
     });
+
+    it("Charlie cannot transfer different token", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 0, { from: alice });
+        await expectThrows(this.erc721.transferFrom(alice, bob, 1, { from: charlie }));
+    });
 });
 
 async function expectThrows(promise) {
