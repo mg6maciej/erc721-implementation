@@ -306,7 +306,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(l.topics[0], "0x" + keccak("ApprovalForAll(address,address,bool)"));
         assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
         assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
-        assert.strictEqual(l.data != ("0x" + "0".repeat(64)), true);
+        assert.strictEqual(l.data != "0x" + "0".repeat(64), true);
     });
 
     it("Transfer event is emitted when Alice sends token to Bob", async () => {
@@ -318,6 +318,19 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
         assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
         assert.strictEqual(parseInt(l.topics[3]), 0);
+    });
+
+    it("Transfer event is emitted when Charlie sends token to Bob", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        await this.erc721.approve(charlie, 1, { from: alice });
+        const { receipt: { logs } } = await this.erc721.transferFrom(alice, bob, 1, { from: charlie });
+        assert.strictEqual(logs.length, 1);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(l.topics[3]), 1);
     });
 });
 

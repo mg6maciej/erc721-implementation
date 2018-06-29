@@ -69,7 +69,7 @@ contract ERC721 {
         if (approved != 0) {
             delete tokenToApproved[tokenId];
         }
-        emit Transfer(msg.sender, to, 0);
+        emit Transfer(from, to, tokenId);
     }
 
     function safeTransferFrom(address from, address to, uint tokenId, bytes data) public {
