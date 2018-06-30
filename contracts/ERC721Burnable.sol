@@ -122,6 +122,6 @@ contract ERC721Burnable is ERC165 {
         address from = tokenToOwner[tokenId];
         ownerToTokens[from] &= ~(1 << tokenId);
         tokenToOwner[tokenId] = 0;
-        totalSupply = 0;
+        totalSupply -= 1;
     }
 }

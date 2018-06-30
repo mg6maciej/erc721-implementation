@@ -50,6 +50,14 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(supply.toNumber(), 0);
     });
 
+    it("Total supply is decreased after burn", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.mint(alice);
+        await this.erc721.burn(0);
+        const supply = await this.erc721.totalSupply();
+        assert.strictEqual(supply.toNumber(), 1);
+    });
+
     it("Alice has zero balance initially", async () => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
