@@ -1,11 +1,9 @@
 pragma solidity ^0.4.24;
 
-interface ERC721Receiver {
+import "./ERC165.sol";
+import "./ERC721Receiver.sol";
 
-    function onERC721Received(address operator, address from, uint tokenId, bytes data) external returns (bytes4);
-}
-
-contract ERC721 {
+contract ERC721 is ERC165 {
 
     event Transfer(address indexed from, address indexed to, uint indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint indexed tokenId);
@@ -17,6 +15,11 @@ contract ERC721 {
     mapping (address => mapping (address => bool)) private ownerToApprovedOperators;
 
     uint public totalSupply;
+
+    constructor() public {
+        supportedInterfaces[0x80ac58cd] = true;
+        supportedInterfaces[0x780e9d63] = true;
+    }
 
     function balanceOf(address owner) external view returns (uint) {
         uint count = 0;

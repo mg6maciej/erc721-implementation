@@ -332,6 +332,21 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), bob);
         assert.strictEqual(parseInt(l.topics[3]), 1);
     });
+
+    it("Contract supports correct ERC165 interfaces", async () => {
+        const supportsInterface = await this.erc721.supportsInterface("0x01ffc9a7");
+        const invalid = await this.erc721.supportsInterface("0xffffffff");
+        const erc721 = await this.erc721.supportsInterface("0x80ac58cd");
+        const erc721Enumerable = await this.erc721.supportsInterface("0x780e9d63");
+        const deadBeef = await this.erc721.supportsInterface("0xdeadbeef");
+        const cafeBabe = await this.erc721.supportsInterface("0xcafebabe");
+        assert.strictEqual(supportsInterface, true);
+        assert.strictEqual(invalid, false);
+        assert.strictEqual(erc721, true);
+        assert.strictEqual(erc721Enumerable, true);
+        assert.strictEqual(deadBeef, false);
+        assert.strictEqual(cafeBabe, false);
+    });
 });
 
 async function expectThrows(promise) {
