@@ -3,7 +3,7 @@ const keccak = require("js-sha3").keccak_256;
 
 const ERC721 = artifacts.require("TestERC721.sol");
 const TestERC721Receiver = artifacts.require("TestERC721Receiver.sol");
-const InvalidTestERC721Receiver = artifacts.require("InvalidTestERC721Receiver.sol");
+const TestERC721ReceiverInvalid = artifacts.require("TestERC721ReceiverInvalid.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
 
@@ -257,7 +257,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
     });
 
     it("Throws when receiver returns invalid magic value", async () => {
-        const receiver = await InvalidTestERC721Receiver.new();
+        const receiver = await TestERC721ReceiverInvalid.new();
         await this.erc721.mint(alice);
         try {
             safeTransferFrom([alice, receiver.address, 0], { from: alice, to: this.erc721.address });
