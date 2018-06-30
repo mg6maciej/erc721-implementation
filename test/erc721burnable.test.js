@@ -66,6 +66,10 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(tokenId.toNumber(), 1);
     });
 
+    it("Throws on burn of nonexistent token", async () => {
+        await expectThrows(this.erc721.burn(0));
+    });
+
     it("Alice has zero balance initially", async () => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);

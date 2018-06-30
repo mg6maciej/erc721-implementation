@@ -146,6 +146,7 @@ contract ERC721Burnable is ERC165 {
 
     function _burn(uint tokenId) internal {
         address from = tokenToOwner[tokenId];
+        require(from != 0);
         allTokens &= ~(1 << tokenId);
         ownerToTokens[from] &= ~(1 << tokenId);
         tokenToOwner[tokenId] = 0;
