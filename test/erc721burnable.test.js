@@ -43,6 +43,13 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await expectThrows(this.erc721.transferFrom(alice, bob, 0, { from: alice }));
     });
 
+    it("Total supply is zero after burn", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.burn(0);
+        const supply = await this.erc721.totalSupply();
+        assert.strictEqual(supply.toNumber(), 0);
+    });
+
     it("Alice has zero balance initially", async () => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
