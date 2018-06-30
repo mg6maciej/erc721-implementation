@@ -70,6 +70,17 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await expectThrows(this.erc721.burn(0));
     });
 
+    it("Transfer event is emitted when burning", async () => {
+        await this.erc721.mint(alice);
+        const { receipt: { logs } } = await this.erc721.burn(0);
+        assert.strictEqual(logs.length, 1);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), "0x" + "0".repeat(40));
+        assert.strictEqual(parseInt(l.topics[3]), 0);
+    });
+
     it("Alice has zero balance initially", async () => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
