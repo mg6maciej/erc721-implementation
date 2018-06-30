@@ -37,6 +37,12 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(balance.toNumber(), 0);
     });
 
+    it("Alice cannot transfer burned token", async () => {
+        await this.erc721.mint(alice);
+        await this.erc721.burn(0);
+        await expectThrows(this.erc721.transferFrom(alice, bob, 0, { from: alice }));
+    });
+
     it("Alice has zero balance initially", async () => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 0);
@@ -376,7 +382,7 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
 });
 
 async function expectThrows(promise) {
-    const resolvedWithoutError = false;
+    let resolvedWithoutError = false;
     try {
         await promise;
         resolvedWithoutError = true;

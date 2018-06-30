@@ -350,7 +350,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
 });
 
 async function expectThrows(promise) {
-    const resolvedWithoutError = false;
+    let resolvedWithoutError = false;
     try {
         await promise;
         resolvedWithoutError = true;
