@@ -266,7 +266,7 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await this.erc721.approve(charlie, 0, { from: alice });
         await this.erc721.transferFrom(alice, bob, 0, { from: charlie });
         const approved = await this.erc721.getApproved(0);
-        assert.strictEqual(approved, "0x0000000000000000000000000000000000000000");
+        assert.strictEqual(approved, "0x" + "0".repeat(40));
     });
 
     it("Alice has zero balance after safe transfer to Bob", async () => {
@@ -405,6 +405,16 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(erc721Enumerable, true);
         assert.strictEqual(deadBeef, false);
         assert.strictEqual(cafeBabe, false);
+    });
+
+    it("Transfer event is emitted when minting", async () => {
+        const { receipt: { logs } } = await this.erc721.mint(alice);
+        assert.strictEqual(logs.length, 1);
+        const l = logs[0];
+        assert.strictEqual(l.topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(l.topics[1].replace("0".repeat(24), ""), "0x" + "0".repeat(40));
+        assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(parseInt(l.topics[3]), 0);
     });
 });
 
