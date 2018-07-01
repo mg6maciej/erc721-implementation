@@ -357,6 +357,10 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(l.topics[2].replace("0".repeat(24), ""), alice);
         assert.strictEqual(parseInt(l.topics[3]), 0);
     });
+
+    it("Throws when minting to address 0x0", async () => {
+        await expectThrows(this.erc721.mint("0x" + "0".repeat(40)));
+    });
 });
 
 async function expectThrows(promise) {

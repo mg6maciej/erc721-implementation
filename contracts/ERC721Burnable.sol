@@ -121,6 +121,7 @@ contract ERC721Burnable is ERC165 {
     }
 
     function _mint(address to) internal {
+        require(to != 0);
         uint tokenId = nextTokenId;
         require(tokenId < 256);
         allTokens |= 1 << tokenId;

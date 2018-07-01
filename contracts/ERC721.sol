@@ -112,6 +112,7 @@ contract ERC721 is ERC165 {
     }
 
     function _mint(address to) internal {
+        require(to != 0);
         uint tokenId = totalSupply;
         require(tokenId < 256);
         ownerToTokens[to] |= 1 << tokenId;
