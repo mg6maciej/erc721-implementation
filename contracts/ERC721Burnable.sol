@@ -71,6 +71,7 @@ contract ERC721Burnable is ERC165 {
     }
 
     function transferFrom(address from, address to, uint tokenId) public {
+        require(to != 0);
         address owner = tokenToOwner[tokenId];
         address approved = tokenToApproved[tokenId];
         require(from == owner);

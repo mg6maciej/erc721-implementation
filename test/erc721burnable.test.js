@@ -431,6 +431,11 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
     it("Throws when minting to address 0x0", async () => {
         await expectThrows(this.erc721.mint("0x" + "0".repeat(40)));
     });
+
+    it("Throws when transferring to address 0x0", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.transferFrom(alice, "0x" + "0".repeat(40), 0, { from: alice }));
+    });
 });
 
 async function expectThrows(promise) {
