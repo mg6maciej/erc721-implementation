@@ -125,5 +125,7 @@ contract ERC721 is ERC165 {
 
     function _mintMultiple(address to, uint amount) internal {
         ownerToTokens[to] = 3;
+        tokenToOwner[0] = to;
+        tokenToOwner[1] = to;
     }
 }
