@@ -28,14 +28,14 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(supply.toNumber(), 2);
     });
 
-    it("Alice has increased balance after minting multiple two times", async () => {
+    it("Alice has increased balance after minting multiple twice", async () => {
         await this.erc721.mintMultiple(alice, 2);
         await this.erc721.mintMultiple(alice, 3);
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 5);
     });
 
-    it("Total supply is increased after minting multiple two times", async () => {
+    it("Total supply is increased after minting multiple twice", async () => {
         await this.erc721.mintMultiple(alice, 2);
         await this.erc721.mintMultiple(alice, 3);
         const supply = await this.erc721.totalSupply();
@@ -44,5 +44,12 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
 
     it("Throws when trying to mint multiple to address 0x0", async () => {
         await expectThrows(this.erc721.mintMultiple("0x" + "0".repeat(40), 2));
+    });
+
+    it("Alice owns tokens after minting multiple twice", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await this.erc721.mintMultiple(alice, 3);
+        const owner = await this.erc721.ownerOf(4);
+        assert.strictEqual(owner, alice);
     });
 });
