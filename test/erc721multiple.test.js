@@ -52,4 +52,9 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const owner = await this.erc721.ownerOf(4);
         assert.strictEqual(owner, alice);
     });
+
+    it("Throws when getting owner of nonexistent token", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await expectThrows(this.erc721.ownerOf(2));
+    });
 });

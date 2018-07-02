@@ -127,7 +127,7 @@ contract ERC721 is ERC165 {
         require(to != 0);
         require(totalSupply + amount <= 256);
         ownerToTokens[to] |= ((1 << amount) - 1) << totalSupply;
-        for (uint i = 0; i < 3; i++) {
+        for (uint i = 0; i < amount; i++) {
             tokenToOwner[totalSupply + i] = to;
         }
         totalSupply += amount;
