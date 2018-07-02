@@ -134,6 +134,7 @@ contract ERC721Burnable is ERC165 {
     }
 
     function _mintMultiple(address to, uint amount) internal {
+        require(to != 0);
         allTokens |= ((1 << amount) - 1) << nextTokenId;
         ownerToTokens[to] |= ((1 << amount) - 1) << nextTokenId;
         tokenToOwner[0] = to;

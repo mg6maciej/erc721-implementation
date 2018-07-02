@@ -1,3 +1,5 @@
+const { expectThrows } = require("./utils");
+
 const ERC721 = artifacts.require("TestERC721.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
@@ -38,5 +40,9 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mintMultiple(alice, 3);
         const supply = await this.erc721.totalSupply();
         assert.strictEqual(supply.toNumber(), 5);
+    });
+
+    it("Throws when trying to mint multiple to address 0x0", async () => {
+        await expectThrows(this.erc721.mintMultiple("0x" + "0".repeat(40), 2));
     });
 });

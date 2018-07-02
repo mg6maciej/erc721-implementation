@@ -1,3 +1,5 @@
+const { expectThrows } = require("./utils");
+
 const ERC721 = artifacts.require("TestERC721.sol");
 
 contract("ERC721", ([owner, alice, bob, charlie]) => {
@@ -12,16 +14,3 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await expectThrows(this.erc721.mint(alice));
     });
 });
-
-async function expectThrows(promise) {
-    let resolvedWithoutError = false;
-    try {
-        await promise;
-        resolvedWithoutError = true;
-    } catch (error) {
-        // ignore
-    }
-    if (resolvedWithoutError) {
-        assert.fail();
-    }
-}

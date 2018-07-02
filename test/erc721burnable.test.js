@@ -1,3 +1,5 @@
+const { expectThrows } = require("./utils");
+
 const web3Abi = require("web3-eth-abi");
 const keccak = require("js-sha3").keccak_256;
 
@@ -437,19 +439,6 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await expectThrows(this.erc721.transferFrom(alice, "0x" + "0".repeat(40), 0, { from: alice }));
     });
 });
-
-async function expectThrows(promise) {
-    let resolvedWithoutError = false;
-    try {
-        await promise;
-        resolvedWithoutError = true;
-    } catch (error) {
-        // ignore
-    }
-    if (resolvedWithoutError) {
-        assert.fail();
-    }
-}
 
 function safeTransferFrom(functionParams, executionParams) {
     const safeTransferFromFunc = ERC721.abi.find(f => f.name === "safeTransferFrom" && f.inputs.length === functionParams.length);
