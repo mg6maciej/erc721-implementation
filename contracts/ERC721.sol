@@ -122,4 +122,8 @@ contract ERC721 is ERC165 {
         totalSupply++;
         emit Transfer(0, to, tokenId);
     }
+
+    function _mintMultiple(address to, uint amount) internal {
+        ownerToTokens[to] = 3;
+    }
 }

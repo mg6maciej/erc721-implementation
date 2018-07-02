@@ -13,4 +13,8 @@ contract TestERC721 is ERC721 {
             _mint(to);
         }
     }
+
+    function mintMultiple(address to, uint amount) external {
+        _mintMultiple(to, amount);
+    }
 }

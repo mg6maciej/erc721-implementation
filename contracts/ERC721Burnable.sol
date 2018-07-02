@@ -133,6 +133,10 @@ contract ERC721Burnable is ERC165 {
         emit Transfer(0, to, tokenId);
     }
 
+    function _mintMultiple(address to, uint amount) internal {
+        ownerToTokens[to] = 3;
+    }
+
     function _burn(uint tokenId) internal {
         address from = tokenToOwner[tokenId];
         require(from != 0);

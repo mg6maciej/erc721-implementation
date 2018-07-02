@@ -8,6 +8,10 @@ contract TestERC721Burnable is ERC721Burnable {
         _mint(to);
     }
 
+    function mintMultiple(address to, uint amount) external {
+        _mintMultiple(to, amount);
+    }
+
     function burn(uint tokenId) external {
         _burn(tokenId);
     }
