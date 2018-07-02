@@ -19,4 +19,10 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(ownerOfZero, alice);
         assert.strictEqual(ownerOfOne, alice);
     });
+
+    it("Total supply is increased after minting multiple", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        const supply = await this.erc721.totalSupply();
+        assert.strictEqual(supply.toNumber(), 2);
+    });
 });

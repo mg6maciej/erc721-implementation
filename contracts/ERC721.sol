@@ -127,5 +127,6 @@ contract ERC721 is ERC165 {
         ownerToTokens[to] = 3;
         tokenToOwner[0] = to;
         tokenToOwner[1] = to;
+        totalSupply = 2;
     }
 }
