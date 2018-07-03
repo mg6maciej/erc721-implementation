@@ -1,5 +1,7 @@
 const { expectThrows } = require("./utils");
 
+const keccak = require("js-sha3").keccak_256;
+
 const ERC721 = artifacts.require("TestERC721Burnable.sol");
 
 contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
@@ -64,5 +66,18 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await this.erc721.mintMultiple(alice, 4);
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 9);
+    });
+
+    it("Transfer events are emitted when minting multiple", async () => {
+        const { receipt: { logs } } = await this.erc721.mintMultiple(alice, 2);
+        assert.strictEqual(logs.length, 2);
+        assert.strictEqual(logs[0].topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), "0x" + "0".repeat(40));
+        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(parseInt(logs[0].topics[3]), 0);
+        assert.strictEqual(logs[1].topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(logs[1].topics[1].replace("0".repeat(24), ""), "0x" + "0".repeat(40));
+        assert.strictEqual(logs[1].topics[2].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(parseInt(logs[1].topics[3]), 1);
     });
 });

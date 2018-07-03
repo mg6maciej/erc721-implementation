@@ -126,10 +126,10 @@ contract ERC721Burnable is ERC165 {
         require(to != 0);
         uint tokenId = nextTokenId;
         require(tokenId < 256);
+        nextTokenId++;
         allTokens |= 1 << tokenId;
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
-        nextTokenId++;
         emit Transfer(0, to, tokenId);
     }
 
@@ -137,12 +137,13 @@ contract ERC721Burnable is ERC165 {
         require(to != 0);
         uint firstTokenId = nextTokenId;
         require(firstTokenId + amount <= 256);
+        nextTokenId += amount;
         allTokens |= ((1 << amount) - 1) << firstTokenId;
         ownerToTokens[to] |= ((1 << amount) - 1) << firstTokenId;
         for (uint i = 0; i < amount; i++) {
             tokenToOwner[firstTokenId + i] = to;
+            emit Transfer(0, to, firstTokenId + i);
         }
-        nextTokenId += amount;
     }
 
     function _burn(uint tokenId) internal {

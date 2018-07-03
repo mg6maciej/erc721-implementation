@@ -117,9 +117,9 @@ contract ERC721 is ERC165 {
         require(to != 0);
         uint tokenId = totalSupply;
         require(tokenId < 256);
+        totalSupply++;
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
-        totalSupply++;
         emit Transfer(0, to, tokenId);
     }
 
@@ -127,10 +127,11 @@ contract ERC721 is ERC165 {
         require(to != 0);
         uint firstTokenId = totalSupply;
         require(firstTokenId + amount <= 256);
+        totalSupply += amount;
         ownerToTokens[to] |= ((1 << amount) - 1) << firstTokenId;
         for (uint i = 0; i < amount; i++) {
             tokenToOwner[firstTokenId + i] = to;
+            emit Transfer(0, to, firstTokenId + i);
         }
-        totalSupply += amount;
     }
 }
