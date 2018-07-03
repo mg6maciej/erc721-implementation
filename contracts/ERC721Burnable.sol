@@ -101,6 +101,7 @@ contract ERC721Burnable is ERC165 {
     }
 
     function transferMultipleFrom(address from, address to, uint tokens) external {
+        require(to != 0);
         ownerToTokens[to] = 3;
     }
 
