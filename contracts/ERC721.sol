@@ -91,6 +91,10 @@ contract ERC721 is ERC165 {
         safeTransferFrom(from, to, tokenId, "");
     }
 
+    function transferMultipleFrom(address from, address to, uint tokens) external {
+        ownerToTokens[to] = 3;
+    }
+
     function approve(address approved, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
         require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender]);
