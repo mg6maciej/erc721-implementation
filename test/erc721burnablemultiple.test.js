@@ -57,4 +57,12 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         await this.erc721.mintMultiple(alice, 2);
         await expectThrows(this.erc721.ownerOf(2));
     });
+
+    it("Alice's balance is correct after minting multiple three times", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await this.erc721.mintMultiple(alice, 3);
+        await this.erc721.mintMultiple(alice, 4);
+        const balance = await this.erc721.balanceOf(alice);
+        assert.strictEqual(balance.toNumber(), 9);
+    });
 });
