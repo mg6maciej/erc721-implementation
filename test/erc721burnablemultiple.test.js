@@ -96,4 +96,9 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
     it("Throws when trying to transfer multiple nonexistent tokens", async () => {
         await expectThrows(this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice }));
     });
+
+    it("Throws when trying to transfer multiple and not owning at least one token", async () => {
+        await this.erc721.mint(alice);
+        await expectThrows(this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice }));
+    });
 });
