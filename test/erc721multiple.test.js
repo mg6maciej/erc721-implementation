@@ -169,4 +169,18 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(ownerOfZero, alice);
         assert.strictEqual(ownerOfTwo, alice);
     });
+
+    it("Transfer events are emitted when transferring multiple", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        const { receipt: { logs } } = await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
+        assert.strictEqual(logs.length, 2);
+        assert.strictEqual(logs[0].topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(logs[0].topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(logs[0].topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(logs[0].topics[3]), 0);
+        assert.strictEqual(logs[1].topics[0], "0x" + keccak("Transfer(address,address,uint256)"));
+        assert.strictEqual(logs[1].topics[1].replace("0".repeat(24), ""), alice);
+        assert.strictEqual(logs[1].topics[2].replace("0".repeat(24), ""), bob);
+        assert.strictEqual(parseInt(logs[1].topics[3]), 1);
+    });
 });
