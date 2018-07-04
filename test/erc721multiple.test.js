@@ -127,4 +127,11 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         const balance = await this.erc721.balanceOf(charlie);
         assert.strictEqual(balance.toNumber(), 2);
     });
+
+    it("Bob's balance is increased correctly when Alice transfers multiple to him", async () => {
+        await this.erc721.mintMultiple(alice, 3);
+        await this.erc721.transferMultipleFrom(alice, bob, 0x7, { from: alice });
+        const balance = await this.erc721.balanceOf(bob);
+        assert.strictEqual(balance.toNumber(), 3);
+    });
 });
