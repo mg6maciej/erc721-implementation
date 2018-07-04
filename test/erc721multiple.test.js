@@ -93,4 +93,11 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.mint(alice);
         await expectThrows(this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice }));
     });
+
+    it("Alice can transfer multiple subset of her tokens", async () => {
+        await this.erc721.mintMultiple(alice, 3);
+        await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
+        const balance = await this.erc721.balanceOf(bob);
+        assert.strictEqual(balance.toNumber(), 2);
+    });
 });
