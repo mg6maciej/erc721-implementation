@@ -142,4 +142,12 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         const balance = await this.erc721.balanceOf(bob);
         assert.strictEqual(balance.toNumber(), 3);
     });
+
+    it("Bob doesn't lose previously owned tokens when Alice transfers multiple to him", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await this.erc721.mint(bob);
+        await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
+        const balance = await this.erc721.balanceOf(bob);
+        assert.strictEqual(balance.toNumber(), 3);
+    });
 });

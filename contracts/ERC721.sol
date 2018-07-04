@@ -96,7 +96,7 @@ contract ERC721 is ERC165 {
         require(ownerToTokens[from] & tokens == tokens);
         require(msg.sender == from || ownerToApprovedOperators[from][msg.sender]);
         ownerToTokens[from] &= ~tokens;
-        ownerToTokens[to] = tokens;
+        ownerToTokens[to] |= tokens;
     }
 
     function approve(address approved, uint tokenId) external {
