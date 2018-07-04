@@ -106,6 +106,8 @@ contract ERC721Burnable is ERC165 {
         require(msg.sender == from || ownerToApprovedOperators[from][msg.sender]);
         ownerToTokens[from] &= ~tokens;
         ownerToTokens[to] |= tokens;
+        tokenToOwner[0] = to;
+        tokenToOwner[1] = to;
     }
 
     function approve(address approved, uint tokenId) external {

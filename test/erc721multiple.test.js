@@ -73,7 +73,7 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(parseInt(logs[1].topics[3]), 1);
     });
 
-    it("Bob owns tokens after Alice transfers multiple", async () => {
+    it("Bob's balance is increased after Alice transfers multiple", async () => {
         await this.erc721.mintMultiple(alice, 2);
         await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
         const balance = await this.erc721.balanceOf(bob);
@@ -141,5 +141,14 @@ contract("ERC721", ([owner, alice, bob, charlie]) => {
         await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
         const balance = await this.erc721.balanceOf(bob);
         assert.strictEqual(balance.toNumber(), 3);
+    });
+
+    it("Bob owns tokens after Alice transfers multiple", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
+        const ownerOfZero = await this.erc721.ownerOf(0);
+        const ownerOfOne = await this.erc721.ownerOf(1);
+        assert.strictEqual(ownerOfZero, bob);
+        assert.strictEqual(ownerOfOne, bob);
     });
 });
