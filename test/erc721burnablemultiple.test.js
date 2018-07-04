@@ -122,4 +122,9 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         const balance = await this.erc721.balanceOf(alice);
         assert.strictEqual(balance.toNumber(), 1);
     });
+
+    it("Bob cannot transfer multiple from Alice to Charlie", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await expectThrows(this.erc721.transferMultipleFrom(alice, charlie, 0x3, { from: bob }));
+    });
 });
