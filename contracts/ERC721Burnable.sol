@@ -128,6 +128,10 @@ contract ERC721Burnable is ERC165 {
         return ownerToApprovedOperators[owner][operator];
     }
 
+    function _exists(uint tokenId) internal view returns (bool) {
+        return (1 << tokenId) & allTokens != 0;
+    }
+
     function _mint(address to) internal {
         require(to != 0);
         uint tokenId = nextTokenId;

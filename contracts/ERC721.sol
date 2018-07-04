@@ -119,6 +119,10 @@ contract ERC721 is ERC165 {
         return ownerToApprovedOperators[owner][operator];
     }
 
+    function _exists(uint tokenId) internal view returns (bool) {
+        return tokenId < totalSupply;
+    }
+
     function _mint(address to) internal {
         require(to != 0);
         uint tokenId = totalSupply;
