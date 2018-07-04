@@ -109,6 +109,9 @@ contract ERC721 is ERC165 {
             if (lsbs & 0x3333333333333333333333333333333333333333333333333333333333333333 != 0) { tokenId -= 2; }
             if (lsbs & 0x5555555555555555555555555555555555555555555555555555555555555555 != 0) { tokenId -= 1; }
             tokenToOwner[tokenId] = to;
+            if (tokenToApproved[tokenId] != 0) {
+                tokenToApproved[tokenId] = 0;
+            }
             emit Transfer(from, to, tokenId);
             tokens ^= lsbs;
         }

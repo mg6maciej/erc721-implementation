@@ -191,4 +191,15 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(logs[1].topics[2].replace("0".repeat(24), ""), bob);
         assert.strictEqual(parseInt(logs[1].topics[3]), 1);
     });
+
+    it("Bob and Charlie are no longer approved after transferring multiple", async () => {
+        await this.erc721.mintMultiple(alice, 2);
+        await this.erc721.approve(bob, 0, { from: alice });
+        await this.erc721.approve(charlie, 1, { from: alice });
+        await this.erc721.transferMultipleFrom(alice, bob, 0x3, { from: alice });
+        const approvedForZero = await this.erc721.getApproved(0);
+        const approvedForOne = await this.erc721.getApproved(1);
+        assert.strictEqual(approvedForZero, "0x" + "0".repeat(40));
+        assert.strictEqual(approvedForOne, "0x" + "0".repeat(40));
+    });
 });
