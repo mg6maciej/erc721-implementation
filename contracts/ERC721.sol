@@ -25,8 +25,8 @@ contract ERC721 is ERC165 {
         uint count = 0;
         uint tokens = ownerToTokens[owner];
         while (tokens != 0) {
-            tokens &= tokens - 1;
             count++;
+            tokens &= tokens - 1;
         }
         return count;
     }
@@ -91,15 +91,26 @@ contract ERC721 is ERC165 {
         safeTransferFrom(from, to, tokenId, "");
     }
 
-    function transferMultipleFrom(address from, address to, uint tokens) external {
+    function transferMultipleFrom(address from, address to, uint tokens) public {
         require(to != 0);
         require(ownerToTokens[from] & tokens == tokens);
         require(msg.sender == from || ownerToApprovedOperators[from][msg.sender]);
         ownerToTokens[from] &= ~tokens;
         ownerToTokens[to] |= tokens;
-        tokenToOwner[0] = to;
-        tokenToOwner[1] = to;
-        tokenToOwner[2] = to;
+        while (tokens != 0) {
+            uint lsbs = tokens & -tokens;
+            uint tokenId = 255;
+            if (lsbs & 0x00000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF != 0) { tokenId -= 128; }
+            if (lsbs & 0x0000000000000000FFFFFFFFFFFFFFFF0000000000000000FFFFFFFFFFFFFFFF != 0) { tokenId -= 64; }
+            if (lsbs & 0x00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF != 0) { tokenId -= 32; }
+            if (lsbs & 0x0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF != 0) { tokenId -= 16; }
+            if (lsbs & 0x00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF != 0) { tokenId -= 8; }
+            if (lsbs & 0x0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F != 0) { tokenId -= 4; }
+            if (lsbs & 0x3333333333333333333333333333333333333333333333333333333333333333 != 0) { tokenId -= 2; }
+            if (lsbs & 0x5555555555555555555555555555555555555555555555555555555555555555 != 0) { tokenId -= 1; }
+            tokenToOwner[tokenId] = to;
+            tokens &= tokens - 1;
+        }
     }
 
     function approve(address approved, uint tokenId) external {

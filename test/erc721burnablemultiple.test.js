@@ -168,4 +168,13 @@ contract("ERC721Burnable", ([owner, alice, bob, charlie]) => {
         assert.strictEqual(ownerOfOne, bob);
         assert.strictEqual(ownerOfTwo, bob);
     });
+
+    it("Alice still owns some of her tokens after transferring multiple", async () => {
+        await this.erc721.mintMultiple(alice, 3);
+        await this.erc721.transferMultipleFrom(alice, bob, 0x2, { from: alice });
+        const ownerOfZero = await this.erc721.ownerOf(0);
+        const ownerOfTwo = await this.erc721.ownerOf(2);
+        assert.strictEqual(ownerOfZero, alice);
+        assert.strictEqual(ownerOfTwo, alice);
+    });
 });
