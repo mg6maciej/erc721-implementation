@@ -23,8 +23,7 @@ contract("ERC721GasEmission", ([owner, alice, bob, charlie]) => {
     });
 
     it("Test gas use for tokenOfOwnerByIndex with single owner", async () => {
-        await this.erc721.mintMany(alice, 128)
-        await this.erc721.mintMany(alice, 128)
+        await this.erc721.mintMultiple(alice, 256);
         let gasTotal = 0;
         let gasInner = 0;
         for (let i = 0; i < 256; i++) {
@@ -35,5 +34,12 @@ contract("ERC721GasEmission", ([owner, alice, bob, charlie]) => {
         console.log(gasTotal, gasInner, gasTotal - gasInner);
         // 9066432 2857472 6208960
         // 8990016 2781056 6208960
+    });
+
+    it("Test gas use for transferMultipleFrom off all 256 tokens", async () => {
+        await this.erc721.mintMultiple(alice, 256);
+        const { receipt } = await this.erc721.transferMultipleFrom(alice, bob, "0x" + "F".repeat(64), { from: alice });
+        console.log(receipt.gasUsed);
+        assert.strictEqual(receipt.gasUsed <= 2094902, true);
     });
 });
