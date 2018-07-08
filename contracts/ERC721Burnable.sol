@@ -13,8 +13,9 @@ contract ERC721Burnable is ERC165 {
     uint private nextTokenId;
     mapping (address => uint) private ownerToTokens;
     mapping (uint => address) private tokenToOwner;
-    mapping (uint => address) private tokenToApproved;
-    mapping (address => mapping (address => bool)) private ownerToApprovedOperators;
+
+    mapping (uint => address) public getApproved;
+    mapping (address => mapping (address => bool)) public isApprovedForAll;
 
     constructor() public {
         supportedInterfaces[0x80ac58cd] = true;
@@ -74,14 +75,14 @@ contract ERC721Burnable is ERC165 {
     function transferFrom(address from, address to, uint tokenId) public {
         require(to != 0);
         address owner = tokenToOwner[tokenId];
-        address approved = tokenToApproved[tokenId];
+        address approved = getApproved[tokenId];
         require(from == owner);
-        require(msg.sender == owner || msg.sender == approved || ownerToApprovedOperators[owner][msg.sender]);
+        require(msg.sender == owner || msg.sender == approved || isApprovedForAll[owner][msg.sender]);
         ownerToTokens[from] &= ~(1 << tokenId);
         ownerToTokens[to] |= 1 << tokenId;
         tokenToOwner[tokenId] = to;
         if (approved != 0) {
-            delete tokenToApproved[tokenId];
+            delete getApproved[tokenId];
         }
         emit Transfer(from, to, tokenId);
     }
@@ -103,7 +104,7 @@ contract ERC721Burnable is ERC165 {
     function transferMultipleFrom(address from, address to, uint tokens) public {
         require(to != 0);
         require(ownerToTokens[from] & tokens == tokens);
-        require(msg.sender == from || ownerToApprovedOperators[from][msg.sender]);
+        require(msg.sender == from || isApprovedForAll[from][msg.sender]);
         ownerToTokens[from] &= ~tokens;
         ownerToTokens[to] |= tokens;
         while (tokens != 0) {
@@ -118,8 +119,8 @@ contract ERC721Burnable is ERC165 {
             if (lsbs & 0x3333333333333333333333333333333333333333333333333333333333333333 != 0) { tokenId -= 2; }
             if (lsbs & 0x5555555555555555555555555555555555555555555555555555555555555555 != 0) { tokenId -= 1; }
             tokenToOwner[tokenId] = to;
-            if (tokenToApproved[tokenId] != 0) {
-                tokenToApproved[tokenId] = 0;
+            if (getApproved[tokenId] != 0) {
+                delete getApproved[tokenId];
             }
             emit Transfer(from, to, tokenId);
             tokens ^= lsbs;
@@ -128,24 +129,16 @@ contract ERC721Burnable is ERC165 {
 
     function approve(address approved, uint tokenId) external {
         address owner = tokenToOwner[tokenId];
-        require(msg.sender == owner || ownerToApprovedOperators[owner][msg.sender]);
+        require(msg.sender == owner || isApprovedForAll[owner][msg.sender]);
         require(approved != owner);
-        tokenToApproved[tokenId] = approved;
+        getApproved[tokenId] = approved;
         emit Approval(owner, approved, tokenId);
     }
 
     function setApprovalForAll(address operator, bool value) external {
         require(msg.sender != operator);
-        ownerToApprovedOperators[msg.sender][operator] = value;
+        isApprovedForAll[msg.sender][operator] = value;
         emit ApprovalForAll(msg.sender, operator, value);
-    }
-
-    function getApproved(uint tokenId) external view returns (address) {
-        return tokenToApproved[tokenId];
-    }
-
-    function isApprovedForAll(address owner, address operator) external view returns (bool) {
-        return ownerToApprovedOperators[owner][operator];
     }
 
     function _exists(uint tokenId) internal view returns (bool) {
