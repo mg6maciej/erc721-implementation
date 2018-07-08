@@ -4,8 +4,8 @@ import "../contracts/ERC721.sol";
 
 contract ExampleERC721Metadata is ERC721 {
 
-    string public name = "Example ERC721 Metadata";
-    string public symbol = "E721M";
+    string public constant name = "Example ERC721 Metadata";
+    string public constant symbol = "E721M";
 
     constructor() public {
         supportedInterfaces[0x5b5e139f] = true;
